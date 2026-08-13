@@ -1,0 +1,36 @@
+name: Metrics
+on:
+  # Automatyczne odświeżanie co 12 godzin
+  schedule: [{cron: "0 */12 * * *"}]
+  # Możliwość ręcznego uruchomienia w zakładce Actions
+  workflow_dispatch:
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+
+          # Plik wyjściowy
+          filename: github-metrics.svg
+
+          # Szablon i wygląd (dark mode)
+          template: classic
+          base: header, activity, community, repositories, metadata
+          config_timezone: Europe/Warsaw
+          
+          # Plugin: Języki programowania
+          plugin_languages: yes
+          plugin_languages_ignored: html, css
+          plugin_languages_details: percentage, bytes-size
+          plugin_languages_limit: 8
+
+          # Plugin: Nawyk commitowania / Aktywność
+          plugin_habits: yes
+          plugin_habits_from: 200
+          plugin_habits_days: 14
+          plugin_habits_facts: yes
+          plugin_habits_charts: yes
